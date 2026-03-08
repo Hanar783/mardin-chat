@@ -1,1 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
 
+<title>Redin Chat</title>
+
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<style>
+
+body{
+font-family:Arial;
+background:#1f1f1f;
+color:white;
+text-align:center;
+}
+
+#chat{
+height:400px;
+overflow:auto;
+border:1px solid gray;
+padding:10px;
+}
+
+.message{
+background:#333;
+padding:8px;
+margin:5px;
+border-radius:8px;
+}
+
+input{
+padding:10px;
+margin:5px;
+}
+
+button{
+padding:10px;
+background:#4CAF50;
+color:white;
+border:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Redin Chat</h2>
+
+<div id="chat"></div>
+
+<input id="name" placeholder="Your name">
+
+<input id="message" placeholder="Message">
+
+<button onclick="send()">Send</button>
+
+<script>
+
+const firebaseConfig = {
+
+apiKey:"PASTE",
+authDomain:"PASTE",
+databaseURL:"PASTE",
+projectId:"PASTE"
+
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.database();
+
+function send(){
+
+let name=document.getElementById("name").value;
+let message=document.getElementById("message").value;
+
+db.ref("messages").push({
+
+name:name,
+text:message
+
+});
+
+document.getElementById("message").value="";
+
+}
+
+db.ref("messages").on("child_added",function(data){
+
+let msg=data.val();
+
+let div=document.createElement("div");
+
+div.className="message";
+
+div.innerHTML="<b>"+msg.name+"</b><br>"+msg.text;
+
+document.getElementById("chat").appendChild(div);
+
+});
+
+</script>
+
+</body>
+</html>
